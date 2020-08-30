@@ -8,6 +8,7 @@ describe('getValue', () => {
     'field with spaces': 'Spaces',
     nested: {object: {prop: 'Nested'}},
     'nested field': {'with spaces': 'Nested Spaces'},
+    ĦĔĽĻŎ: {〱〱〱〱: {जावास्क्रिप्ट: 'Nested Unicode Characters'}},
   };
 
   it('should return undefined for undefined or null arguments', () => {
@@ -33,6 +34,19 @@ describe('getValue', () => {
 
   it('should return nested field value', () => {
     expect(getValue(obj, 'nested.object.prop')).toEqual('Nested');
-    expect(getValue(obj, 'nested field.with spaces')).toEqual('Nested Spaces');
+    expect(getValue(obj, 'nested["object"].prop')).toEqual('Nested');
+    expect(getValue(obj, 'nested["object"]["prop"]')).toEqual('Nested');
+    expect(getValue(obj, 'nested field["with spaces"]')).toEqual(
+      'Nested Spaces',
+    );
+    expect(getValue(obj, 'ĦĔĽĻŎ.〱〱〱〱.जावास्क्रिप्ट')).toEqual(
+      'Nested Unicode Characters',
+    );
+    expect(getValue(obj, "ĦĔĽĻŎ.〱〱〱〱['जावास्क्रिप्ट']")).toEqual(
+      'Nested Unicode Characters',
+    );
+    expect(getValue(obj, "ĦĔĽĻŎ['〱〱〱〱']['जावास्क्रिप्ट']")).toEqual(
+      'Nested Unicode Characters',
+    );
   });
 });
