@@ -8,8 +8,19 @@ describe('Column', () => {
   const rowData = Immutable.Map({
     foo: 'Foo',
     bar: 1,
-    nested: {column: {value: 'Nested'}},
-    otherNested: {column: {value: 'Other Nested'}},
+    nested: {
+      column: {
+        value: 'Nested',
+      },
+      'other column': {
+        '"strangePropName"': 'Nested With Spaces',
+      },
+    },
+    otherNested: {
+      column: {
+        value: 'Other Nested',
+      },
+    },
   });
 
   describe('defaultCellDataGetter', () => {
@@ -41,6 +52,12 @@ describe('Column', () => {
           rowData,
         }),
       ).toEqual('Other Nested');
+      expect(
+        defaultCellDataGetter({
+          dataKey: 'nested["other column"][""strangePropName""]',
+          rowData,
+        }),
+      ).toEqual('Nested With Spaces');
     });
 
     it('should return undefined for missing attributes', () => {

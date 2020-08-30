@@ -1,12 +1,14 @@
 const propertyNameCaptureRegex = new RegExp(/([^\.\[\]\n\r]+)/, 'g');
 
 /**
- * Takes in an Object or Map along with a dot formatted path and looks to find
- * the value associated with the path in the provided object. This works for both
- * nested and non-nested properties.
+ * Takes in an Object or Map along with a String path and looks to find the value
+ * associated with the path in the provided object. This works for both nested
+ * and non-nested properties with both dot and square bracket notation.
+ *
+ * Note: this will not work with square brackets as part of a property name
  *
  * @param obj Object or Map value source
- * @param path String in dot notation, used to look for value in obj
+ * @param path String path used to look for value in obj
  * @returns {any} value located at the dot natation path for the given obj or undefined if nothing is found;
  * will return undefined for any missing argumnt
  */
@@ -21,6 +23,7 @@ export default function getValue(obj: Object | Map, path: String) {
     let currentReference = obj;
     for (let i = 0; i < propertyNames.length; i++) {
       let currentPropertyName = propertyNames[i];
+
       if (typeof currentReference.get === 'function') {
         currentReference = currentReference.get(currentPropertyName);
       } else {

@@ -11,17 +11,5 @@ export default function defaultCellDataGetter({
   dataKey,
   rowData,
 }: CellDataGetterParams) {
-  let value;
-
-  if (typeof rowData.get === 'function') {
-    value = rowData.get(dataKey);
-  } else {
-    value = rowData[dataKey];
-  }
-
-  if (value === undefined) {
-    value = getValue(rowData, dataKey);
-  }
-
-  return value;
+  return getValue(rowData, dataKey);
 }
